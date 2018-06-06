@@ -16,17 +16,9 @@ class PhotosViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        store.fetchInterestingPhotos { (photoResult) in
-            switch photoResult {
-            case let .success(photos):
-                print("Successfully found \(photos.count) photos.")
-                if let firstPhoto = photos.first {
-                    self.updateImageView(for: firstPhoto)
-                }
-            case let .failure(error):
-                print("Error fetching interesting photos: \(error)")
-            }
-        }
+        let segmentedControl = UISegmentedControl(items: ["Interesting", "Recent"])
+        segmentedControl.addTarget(self, action: #selector(fetchPhoto), for: .valueChanged)
+        self.navigationItem.titleView = segmentedControl
     }
     
     func updateImageView(for photo: Photo) {
@@ -36,6 +28,22 @@ class PhotosViewController: UIViewController {
                 self.imageView.image = image
             case let .failure(error):
                 print("Error downloading image: \(error)")
+            }
+        }
+    }
+    
+    @objc func fetchPhoto(_ sender: UISegmentedControl) {
+        let method: Method = sender.selectedSegmentIndex == 0 ? .interestingPhotos : .recentPhotos
+        
+        store.fetchPhotos(for: method) { (photoResult) in
+            switch photoResult {
+            case let .success(photos):
+                print("Successfully found \(photos.count) photos.")
+                if let firstPhoto = photos.first {
+                    self.updateImageView(for: firstPhoto)
+                }
+            case let .failure(error):
+                print("Error fetching interesting photos: \(error)")
             }
         }
     }

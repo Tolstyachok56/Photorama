@@ -26,8 +26,8 @@ class PhotoStore {
     
     private let session: URLSession = { return URLSession(configuration: .default) }()
     
-    func fetchInterestingPhotos(completion: @escaping (PhotoResult) -> Void) {
-        let url = FlickrAPI.interestingPhotosURL
+    func fetchPhotos(for method: Method, completion: @escaping (PhotoResult) -> Void) {
+        let url = FlickrAPI.photosURL(for: method)
         let request = URLRequest(url: url)
         let task = session.dataTask(with: request) { (data, response, error) in
             let result = self.processPhotoRequest(data: data, error: error)
@@ -37,7 +37,7 @@ class PhotoStore {
         }
         task.resume()
     }
-    
+
     private func processPhotoRequest(data: Data?, error: Error?) -> PhotoResult {
         guard let jsonData = data else {
             return .failure(error!)
