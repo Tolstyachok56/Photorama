@@ -14,7 +14,7 @@ class Photo {
     let photoID: String
     let dateTaken: Date
     
-    init(title: String, remoteURL: URL, photoID: String, dateTaken: Date) {
+    init(title: String, photoID: String, remoteURL: URL,  dateTaken: Date) {
         self.title = title
         self.remoteURL = remoteURL
         self.photoID = photoID
