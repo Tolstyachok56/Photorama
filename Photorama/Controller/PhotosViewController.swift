@@ -8,12 +8,14 @@
 
 import UIKit
 
-class PhotosViewController: UIViewController, UICollectionViewDelegate {
+class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet var collectionView: UICollectionView!
     
     var store: PhotoStore!
     let photoDataSource = PhotoDataSource()
+    
+    //MARK: -
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +34,10 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate {
             }
             self.collectionView.reloadSections(IndexSet(integer: 0))
         }
+    }
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     //MARK: - UICollectionViewDelegate methods
@@ -65,6 +71,32 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate {
         default:
             preconditionFailure("Unexpected segue identifier.")
         }
+    }
+    
+    //MARK: - UICollectionViewDelegateFlowLayout
+    
+    let photosInRow: CGFloat = 4
+    let minSpacing: CGFloat = 2
+    let sectionInset: CGFloat = 2
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let rowWidth = collectionView.bounds.size.width
+        let itemWidth = (rowWidth - 2 * sectionInset - (photosInRow - 1) * minSpacing) / photosInRow
+        
+        return CGSize(width: itemWidth, height: itemWidth)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return minSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return minSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let edgeInsets = UIEdgeInsets(top: sectionInset, left: sectionInset, bottom: sectionInset, right: sectionInset)
+        return edgeInsets
     }
     
 }
