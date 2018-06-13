@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 enum PhotoResult {
     case success([Photo])
@@ -25,6 +26,16 @@ enum PhotoError: Error {
 class PhotoStore {
     
     let imageStore = ImageStore()
+    
+    let persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "Photorama")
+        container.loadPersistentStores(completionHandler: { (description, error) in
+            if let error = error {
+                print("Error setting up Core Data: \(error)")
+            }
+        })
+        return container
+    }()
     
     private let session: URLSession = { return URLSession(configuration: .default) }()
     
