@@ -11,4 +11,10 @@ import CoreData
 
 class TagsViewController: UIViewController {
     
+    var photoStore: PhotoStore!
+    var photo: Photo!
+    
+    var selectedIndexPaths = [IndexPath]()
+    
+    
 }
