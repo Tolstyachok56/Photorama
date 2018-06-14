@@ -120,6 +120,7 @@ struct FlickrAPI {
             photo.photoID = photoID
             photo.remoteURL = url as NSURL
             photo.dateTaken = dateTaken as NSDate
+            photo.viewsCount = 0
         }
         
         return photo

@@ -2,7 +2,7 @@
 //  Photo+CoreDataClass.swift
 //  Photorama
 //
-//  Created by Виктория Бадисова on 13.06.2018.
+//  Created by Виктория Бадисова on 14.06.2018.
 //  Copyright © 2018 Виктория Бадисова. All rights reserved.
 //
 //

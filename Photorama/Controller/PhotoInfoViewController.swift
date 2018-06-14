@@ -31,6 +31,19 @@ class PhotoInfoViewController: UIViewController {
                 print("Error fetching image for photo: \(error)")
             }
         }
+        
+        photo.viewsCount += 1
+        try? photo.managedObjectContext?.save()
+        
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.text = "\(photo.viewsCount) view(s)"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(label)
+        
+        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
+        
     }
 
 }
