@@ -88,15 +88,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FHh-g2-FBM">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                             </imageView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SpN-16-Pqj">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem title="Tags" id="3Za-zW-MQ8"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FHh-g2-FBM" firstAttribute="leading" secondItem="tNe-1q-M4s" secondAttribute="leading" id="52l-u6-52z"/>
                             <constraint firstItem="FHh-g2-FBM" firstAttribute="top" secondItem="tNe-1q-M4s" secondAttribute="top" id="AjM-23-FUa"/>
+                            <constraint firstItem="SpN-16-Pqj" firstAttribute="top" secondItem="FHh-g2-FBM" secondAttribute="bottom" id="ICI-Pj-1za"/>
                             <constraint firstItem="tNe-1q-M4s" firstAttribute="trailing" secondItem="FHh-g2-FBM" secondAttribute="trailing" id="W1F-IW-sxO"/>
-                            <constraint firstItem="tNe-1q-M4s" firstAttribute="bottom" secondItem="FHh-g2-FBM" secondAttribute="bottom" id="iKS-oe-vrW"/>
+                            <constraint firstItem="SpN-16-Pqj" firstAttribute="leading" secondItem="tNe-1q-M4s" secondAttribute="leading" id="aT6-gk-GCf"/>
+                            <constraint firstItem="SpN-16-Pqj" firstAttribute="bottom" secondItem="tNe-1q-M4s" secondAttribute="bottom" id="mer-Ei-jNL"/>
+                            <constraint firstItem="SpN-16-Pqj" firstAttribute="trailing" secondItem="tNe-1q-M4s" secondAttribute="trailing" id="sbt-XE-aAh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tNe-1q-M4s"/>
                     </view>
@@ -106,7 +115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cl5-Xz-sVy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1782" y="116"/>
+            <point key="canvasLocation" x="1781.5999999999999" y="115.59220389805098"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6Wr-gc-WZ4">
