@@ -48,9 +48,11 @@ class TagsViewController: UITableViewController {
             case  let .failure(error):
                 print("Error fetching tags: \(error).")
             }
+            
+            self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
         }
         
-        tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+        
     }
     
     //MARK: - UITableViewDelegate methods
