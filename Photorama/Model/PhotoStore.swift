@@ -9,7 +9,12 @@
 import UIKit
 import CoreData
 
-enum PhotoResult {
+
+enum PhotoError: Error {
+    case imageCreationError
+}
+
+enum PhotosResult {
     case success([Photo])
     case failure(Error)
 }
@@ -19,8 +24,9 @@ enum ImageResult {
     case failure(Error)
 }
 
-enum PhotoError: Error {
-    case imageCreationError
+enum TagsResult {
+    case success([Tag])
+    case failure(Error)
 }
 
 class PhotoStore {
@@ -39,7 +45,7 @@ class PhotoStore {
     
     private let session: URLSession = { return URLSession(configuration: .default) }()
     
-    func fetchInterestingPhotos(completion: @escaping (PhotoResult) -> Void) {
+    func fetchInterestingPhotos(completion: @escaping (PhotosResult) -> Void) {
         let url = FlickrAPI.interestingPhotosURL
         let request = URLRequest(url: url)
         let task = session.dataTask(with: request) { (data, response, error) in
@@ -60,7 +66,7 @@ class PhotoStore {
         task.resume()
     }
     
-    private func processPhotoRequest(data: Data?, error: Error?) -> PhotoResult {
+    private func processPhotoRequest(data: Data?, error: Error?) -> PhotosResult {
         guard let jsonData = data else {
             return .failure(error!)
         }
@@ -111,7 +117,7 @@ class PhotoStore {
         return .success(image)
     }
     
-    func fetchAllPhotos(completion: @escaping (PhotoResult) -> Void) {
+    func fetchAllPhotos(completion: @escaping (PhotosResult) -> Void) {
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
         let sortByDateTaken = NSSortDescriptor(key: #keyPath(Photo.dateTaken), ascending: true)
         fetchRequest.sortDescriptors = [sortByDateTaken]
@@ -121,6 +127,22 @@ class PhotoStore {
             do {
                 let allPhotos = try viewContext.fetch(fetchRequest)
                 completion(.success(allPhotos))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func fetchAllTags(completion: @escaping (TagsResult) -> Void) {
+        let fetchRequest: NSFetchRequest<Tag> = Tag.fetchRequest()
+        let sortByName = NSSortDescriptor(key: #keyPath(Tag.name), ascending: true)
+        fetchRequest.sortDescriptors = [sortByName]
+        
+        let viewContext = persistentContainer.viewContext
+        viewContext.perform {
+            do {
+                let allTags = try viewContext.fetch(fetchRequest)
+                completion(.success(allTags))
             } catch let error {
                 completion(.failure(error))
             }
