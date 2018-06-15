@@ -13,6 +13,8 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var spiner: UIActivityIndicatorView!
     
+    var photoDescription: String?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -33,6 +35,21 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             spiner.startAnimating()
             imageView.image = nil
         }
+    }
+    
+    override var isAccessibilityElement: Bool {
+        get { return true }
+        set { super.isAccessibilityElement = newValue }
+    }
+    
+    override var accessibilityLabel: String? {
+        get { return photoDescription }
+        set {}
+    }
+    
+    override var accessibilityTraits: UIAccessibilityTraits {
+        get { return super.accessibilityTraits | UIAccessibilityTraitImage }
+        set {}
     }
     
 }
