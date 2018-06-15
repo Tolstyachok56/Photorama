@@ -45,33 +45,52 @@ class PhotoStore {
     
     private let session: URLSession = { return URLSession(configuration: .default) }()
     
+    //MARK: - Fetching interesting photos
+    
     func fetchInterestingPhotos(completion: @escaping (PhotosResult) -> Void) {
         let url = FlickrAPI.interestingPhotosURL
         let request = URLRequest(url: url)
         let task = session.dataTask(with: request) { (data, response, error) in
-            var result = self.processPhotoRequest(data: data, error: error)
             
-            if case .success = result {
-                do {
-                    try self.persistentContainer.viewContext.save()
-                } catch let error {
-                    result = .failure(error)
+            self.processPhotoRequest(data: data, error: error, completion: { (result) in
+                OperationQueue.main.addOperation {
+                    completion(result)
                 }
-            }
+            })
             
-            OperationQueue.main.addOperation {
-                completion(result)
-            }
         }
         task.resume()
     }
     
-    private func processPhotoRequest(data: Data?, error: Error?) -> PhotosResult {
+    private func processPhotoRequest(data: Data?, error: Error?, completion: @escaping (PhotosResult) -> Void) {
         guard let jsonData = data else {
-            return .failure(error!)
+            completion(.failure(error!))
+            return
         }
-        return FlickrAPI.photos(fromJSON: jsonData, into: persistentContainer.viewContext)
+        
+        persistentContainer.performBackgroundTask { (context) in
+            let result = FlickrAPI.photos(fromJSON: jsonData, into: context)
+            do {
+                try context.save()
+            } catch {
+                print("Error saveing to Core Data: \(error).")
+                completion(.failure(error))
+                return
+            }
+            
+            switch result {
+            case let .success(photos):
+                let photoIDs = photos.map{ return $0.objectID }
+                let viewContext = self.persistentContainer.viewContext
+                let viewContextPhotos = photoIDs.map{ return viewContext.object(with: $0) } as! [Photo]
+                completion(.success(viewContextPhotos))
+            case .failure:
+                completion(result)
+            }
+        }
     }
+    
+    //MARK: - Fetching image
     
     func fetchImage(for photo: Photo, completion: @escaping (ImageResult) -> Void) {
         
@@ -116,6 +135,8 @@ class PhotoStore {
         }
         return .success(image)
     }
+    
+    //MARK: - Fetching all photos and all tags
     
     func fetchAllPhotos(completion: @escaping (PhotosResult) -> Void) {
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
