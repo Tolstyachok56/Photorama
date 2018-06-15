@@ -2,7 +2,7 @@
 //  Photo+CoreDataProperties.swift
 //  Photorama
 //
-//  Created by Виктория Бадисова on 14.06.2018.
+//  Created by Виктория Бадисова on 15.06.2018.
 //  Copyright © 2018 Виктория Бадисова. All rights reserved.
 //
 //
@@ -21,6 +21,7 @@ extension Photo {
     @NSManaged public var photoID: String?
     @NSManaged public var remoteURL: NSURL?
     @NSManaged public var title: String?
+    @NSManaged public var favorite: Bool
     @NSManaged public var tags: NSSet?
 
 }

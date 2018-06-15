@@ -11,6 +11,7 @@ import UIKit
 class PhotoInfoViewController: UIViewController {
     
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet var favSwitch: UISwitch!
     
     var photo: Photo! {
         didSet {
@@ -31,6 +32,7 @@ class PhotoInfoViewController: UIViewController {
                 print("Error fetching image for photo: \(error)")
             }
         }
+        favSwitch.isOn = photo.favorite
     }
     
     //MARK: - Navigation
@@ -46,5 +48,17 @@ class PhotoInfoViewController: UIViewController {
             preconditionFailure("Unexpected segue identifier.")
         }
     }
+    
+    //MARK: - Actions
+    
+    @IBAction func addToFavorites(_ sender: UISwitch) {
+        photo.favorite = sender.isOn
+        do {
+            try store.persistentContainer.viewContext.save()
+        } catch {
+            print("Error saving to Core Data: \(error)")
+        }
+    }
+    
 
 }
