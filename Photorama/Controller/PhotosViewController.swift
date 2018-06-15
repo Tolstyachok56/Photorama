@@ -11,6 +11,7 @@ import UIKit
 class PhotosViewController: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var segmentedControl: UISegmentedControl!
     
     var store: PhotoStore!
     let photoDataSource = PhotoDataSource()
@@ -68,7 +69,11 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate {
             
             switch photosResult {
             case let .success(photos):
-                self.photoDataSource.photos = photos
+                if self.segmentedControl.selectedSegmentIndex == 0 {
+                    self.photoDataSource.photos = photos
+                } else {
+                    self.photoDataSource.photos = photos.filter { $0.favorite }
+                }
             case .failure:
                 self.photoDataSource.photos.removeAll()
             }
@@ -77,4 +82,9 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate {
         }
     }
     
+    //MARK: - Actions
+    
+    @IBAction func switchPhotoFilter(_ sender: UISegmentedControl) {
+        updateDataSource()
+    }
 }
